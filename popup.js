@@ -34,7 +34,6 @@ function createInputRow(type, value = '') {
   return input
 }
 
-
 function handleClickAddButton() {
   createInputRow('streamer')
 }
@@ -44,7 +43,6 @@ function handleClickTagAddButton() {
   createInputRow('tag')
 }
 document.getElementById('tag-add-btn').addEventListener('click', handleClickTagAddButton)
-
 
 function exportSettings() {
   chrome.storage.sync.get(["streamerNames", "tags"], function (result) {
@@ -66,7 +64,6 @@ function exportSettings() {
   })
 }
 document.getElementById("export").addEventListener("click", exportSettings)
-
 
 function importSettings(e) {
   const file = e.target.files[0]
@@ -102,7 +99,6 @@ function importSettings(e) {
 }
 document.getElementById('import').addEventListener('change', importSettings)
 
-
 function saveInputs() {
   const inputs = document.querySelectorAll('#input-wrap .input-item-row input[type="text"]')
   const streamerNames = []
@@ -122,7 +118,6 @@ function saveInputs() {
   chrome.storage.sync.set({ streamerNames, tags })
 }
 
-
 function loadInputs() {
   chrome.storage.sync.get(['streamerNames', 'tags'], (result) => {
     const inputWrap = document.getElementById('input-wrap')
@@ -138,7 +133,34 @@ function loadInputs() {
     tags.forEach((value) => {
       createInputRow('tag', value)
     })
+
   })
 }
+
+function filterItems(searchText) {
+  const inputRows = document.querySelectorAll('#input-wrap .input-item-row')
+
+  inputRows.forEach(row => {
+    const input = row.querySelector('input[type="text"]')
+    const value = input.value.toLowerCase()
+
+    if (searchText === '' || value.includes(searchText.toLowerCase())) {
+      row.classList.remove('hidden')
+    } else {
+      row.classList.add('hidden')
+    }
+  })
+}
+
+document.getElementById('search-input').addEventListener('input', function(e) {
+  const searchText = e.target.value.trim()
+  filterItems(searchText)
+})
+
+document.getElementById('search-clear-btn').addEventListener('click', function() {
+  const searchInput = document.getElementById('search-input')
+  searchInput.value = ''
+  filterItems('')
+})
 
 document.addEventListener('DOMContentLoaded', loadInputs)

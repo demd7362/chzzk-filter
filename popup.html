@@ -46,6 +46,51 @@
 				display: none;
 			}
 			
+			.search-container {
+				margin-bottom: 15px;
+				display: flex;
+				gap: 8px;
+				align-items: center;
+			}
+			
+			#search-input {
+				flex-grow: 1;
+				padding: 10px;
+				max-width: 65%;
+				background-color: #333333;
+				color: #f0f0f0;
+				border: 1px solid #555555;
+				border-radius: 4px;
+				font-size: 14px;
+				transition: border-color 0.3s ease, box-shadow 0.3s ease;
+			}
+			
+			#search-input::placeholder {
+				color: #888888;
+				opacity: 1;
+			}
+			
+			#search-input:focus {
+				outline: none;
+				border-color: #4CAF50;
+				box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5);
+			}
+			
+			.search-clear-btn {
+				padding: 8px 12px;
+				background-color: #666;
+				color: white;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				font-size: 12px;
+				transition: background-color 0.3s ease;
+			}
+			
+			.search-clear-btn:hover {
+				background-color: #777;
+			}
+			
 			#input-wrap {
 				display: flex;
 				flex-direction: column;
@@ -57,6 +102,10 @@
 				display: flex;
 				align-items: center;
 				gap: 0.5rem;
+			}
+			
+			.input-item-row.hidden {
+				display: none;
 			}
 			
 			.input-item-row input[type="text"] {
@@ -199,10 +248,19 @@
 			<label for="import">설정 불러오기</label>
 			<span id="export">설정 내보내기</span>
 		</div>
-		<input id="import" type="file"/> <h2>필터링할 항목을 입력하세요.</h2> <div id="input-wrap">
-	</div>
+		<input id="import" type="file"/>
 		
-		<div class="add-buttons-container"> <button id="add-btn" class="add-btn">스트리머 추가</button>
+		<div class="search-container">
+			<input id="search-input" type="text" placeholder="스트리머 또는 태그 검색...">
+			<button id="search-clear-btn" class="search-clear-btn">초기화</button>
+		</div>
+		
+		<h2>필터링할 항목을 입력하세요.</h2>
+		
+		<div id="input-wrap"></div>
+		
+		<div class="add-buttons-container">
+			<button id="add-btn" class="add-btn">스트리머 추가</button>
 			<button id="tag-add-btn" class="add-btn">태그 추가</button>
 		</div>
 		
