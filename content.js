@@ -1,12 +1,22 @@
-console.log("chzzk filter activated")
-console.log("source code link: https://github.com/demd7362/chzzk-filter")
 const delay = 12 / navigator.hardwareConcurrency * 200
-console.log('delay', delay)
+console.log(`치지직 필터가 활성화되었습니다. 딜레이 ${delay}`)
+console.log("소스 코드 https://github.com/demd7362/chzzk-filter")
 
 document.querySelector('body').insertAdjacentHTML('beforeend', `
-<div id="custom-context-menu" style="display: none; position: absolute; background-color: black; border: 2px solid green; padding: 10px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);">
-    
+<div id="custom-context-menu" style="
+    display: none; 
+    position: absolute; 
+    background-color: #282828; /* Dark gray, slightly lighter than pure black */
+    border: 1px solid #4CAF50; /* Primary green border */
+    border-radius: 6px; /* Softer corners */
+    padding: 7px; /* Padding top/bottom, items will have horizontal padding */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* More pronounced shadow */
+    z-index: 2147483647; /* Max z-index to be on top */
+    overflow: hidden; /* Ensures items with padding fit well with border-radius */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Consistent font */
+">
 </div>`)
+
 
 // function getStorageData(keys) {
 //   return new Promise((resolve, reject) => {
