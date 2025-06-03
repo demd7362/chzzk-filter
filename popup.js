@@ -178,3 +178,8 @@ document.getElementById('filter-toggle').addEventListener('change', function (e)
     })
   })
 })
+
+chrome.storage.sync.get(['isActive'], (result) => {
+  const isActive = result.isActive ?? true
+  document.getElementById('filter-toggle').checked = isActive
+})
