@@ -1,6 +1,6 @@
 const delay = 12 / navigator.hardwareConcurrency * 200
 console.log(`치지직 필터가 활성화되었습니다. 딜레이 ${delay}`)
-console.log("소스 코드 https://github.com/demd7362/chzzk-filter")
+console.log('https://github.com/demd7362/chzzk-filter')
 
 document.querySelector('body').insertAdjacentHTML('beforeend', `
 <div id="custom-context-menu" style="
@@ -16,7 +16,6 @@ document.querySelector('body').insertAdjacentHTML('beforeend', `
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Consistent font */
 ">
 </div>`)
-
 
 // function getStorageData(keys) {
 //   return new Promise((resolve, reject) => {
@@ -38,7 +37,10 @@ document.querySelector('body').insertAdjacentHTML('beforeend', `
 
 // promise를 리턴하고 동기적으로 만들면 스트리밍을 받아오지 못함
 function filterStreamers() {
-  chrome.storage.sync.get(['streamerNames', 'tags'], (result) => {
+  chrome.storage.sync.get(['streamerNames', 'tags','isActive'], (result) => {
+    if(!result.isActive){
+      return
+    }
     const streamerNames = new Set(result.streamerNames || [])
     const tags = new Set(result.tags || [])
     document.querySelectorAll('li').forEach((node) => {
@@ -154,14 +156,14 @@ document.addEventListener('click', () => {
 function init() {
   setTimeout(() => {
     filterStreamers()
-    softDeleteHiddenNodes()
+    hideNodes()
   }, delay)
 }
 
 init()
 
 // https://chzzk.naver.com/lives에서 인기/최신/추천 탭 클릭 시 에러 -> node 삭제가 아니라 display none 처리
-function softDeleteHiddenNodes() {
+function hideNodes() {
   document.querySelectorAll('li').forEach(node => {
     if (node.style.visibility === 'hidden') { // inline css hidden 설정해놓은 노드
       node.style.display = 'none'
@@ -178,7 +180,7 @@ const observer = new MutationObserver((mutations) => {
         queryNode.addEventListener('contextmenu', handleCustomMenu)
       })
       filterStreamers() // 새로운 <li>가 추가될 때마다 필터링 적용
-      softDeleteHiddenNodes()
+      hideNodes()
     }
   })
 })

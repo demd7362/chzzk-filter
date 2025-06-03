@@ -22,7 +22,7 @@ function createInputRow(type, value = '') {
     chrome.storage.sync.get([storageKey], function (result) {
       const values = result[storageKey] || []
       const filtered = values.filter(item => item !== valueToRemove)
-      chrome.storage.sync.set({ [storageKey]: filtered })
+      chrome.storage.sync.set({[storageKey]: filtered})
     })
   })
 
@@ -37,17 +37,19 @@ function createInputRow(type, value = '') {
 function handleClickAddButton() {
   createInputRow('streamer')
 }
+
 document.getElementById('add-btn').addEventListener('click', handleClickAddButton)
 
 function handleClickTagAddButton() {
   createInputRow('tag')
 }
+
 document.getElementById('tag-add-btn').addEventListener('click', handleClickTagAddButton)
 
 function exportSettings() {
   chrome.storage.sync.get(["streamerNames", "tags"], function (result) {
     const json = JSON.stringify(result, null, 2)
-    const data = new Blob([json], { type: "application/json" })
+    const data = new Blob([json], {type: "application/json"})
     const url = URL.createObjectURL(data)
     const a = document.createElement("a")
     a.href = url
@@ -63,6 +65,7 @@ function exportSettings() {
     URL.revokeObjectURL(url)
   })
 }
+
 document.getElementById("export").addEventListener("click", exportSettings)
 
 function importSettings(e) {
@@ -74,12 +77,12 @@ function importSettings(e) {
   reader.onload = (event) => {
     try {
       const data = JSON.parse(event.target.result)
-      const { streamerNames, tags } = data
+      const {streamerNames, tags} = data
       if (!Array.isArray(streamerNames) || !Array.isArray(tags)) {
         alert('파일 형식이 부적절합니다.')
         return
       }
-      chrome.storage.sync.set({ streamerNames, tags }, () => {
+      chrome.storage.sync.set({streamerNames, tags}, () => {
         const inputWrap = document.getElementById('input-wrap')
         while (inputWrap.firstChild) {
           inputWrap.removeChild(inputWrap.firstChild)
@@ -97,6 +100,7 @@ function importSettings(e) {
   reader.readAsText(file)
   e.target.value = null
 }
+
 document.getElementById('import').addEventListener('change', importSettings)
 
 function saveInputs() {
@@ -115,7 +119,7 @@ function saveInputs() {
       streamerNames.push(value)
     }
   })
-  chrome.storage.sync.set({ streamerNames, tags })
+  chrome.storage.sync.set({streamerNames, tags})
 }
 
 function loadInputs() {
@@ -125,7 +129,7 @@ function loadInputs() {
       inputWrap.removeChild(inputWrap.firstChild)
     }
 
-    const { streamerNames = [], tags = [] } = result
+    const {streamerNames = [], tags = []} = result
 
     streamerNames.forEach((value) => {
       createInputRow('streamer', value)
@@ -152,15 +156,25 @@ function filterItems(searchText) {
   })
 }
 
-document.getElementById('search-input').addEventListener('input', function(e) {
+document.getElementById('search-input').addEventListener('input', function (e) {
   const searchText = e.target.value.trim()
   filterItems(searchText)
 })
 
-document.getElementById('search-clear-btn').addEventListener('click', function() {
+document.getElementById('search-clear-btn').addEventListener('click', function () {
   const searchInput = document.getElementById('search-input')
   searchInput.value = ''
   filterItems('')
 })
 
 document.addEventListener('DOMContentLoaded', loadInputs)
+
+document.getElementById('filter-toggle').addEventListener('change', function (e) {
+  chrome.storage.sync.set({'isActive': e.target.checked}, () => {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+      if (tabs && tabs[0]) {
+        chrome.tabs.reload(tabs[0].id)
+      }
+    })
+  })
+})
