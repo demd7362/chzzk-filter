@@ -38,7 +38,8 @@ document.querySelector('body').insertAdjacentHTML('beforeend', `
 // promise를 리턴하고 동기적으로 만들면 스트리밍을 받아오지 못함
 function filterStreamers() {
   chrome.storage.sync.get(['streamerNames', 'tags','isActive'], (result) => {
-    if(!result.isActive){
+    const isActive = result.isActive ?? true
+    if(!isActive){
       return
     }
     const streamerNames = new Set(result.streamerNames || [])
